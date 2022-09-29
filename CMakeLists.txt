@@ -16,6 +16,12 @@ FetchContent_Declare(glfw
         )
 FetchContent_MakeAvailable(glfw)
 
+FetchContent_Declare(glm
+        GIT_REPOSITORY git@github.com:g-truc/glm.git
+        GIT_TAG 0.9.9.8
+        )
+FetchContent_MakeAvailable(glm)
+
 FetchContent_Declare(
         glew
         GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
@@ -31,4 +37,4 @@ endif ()
 
 add_executable(opengl_practice main.cpp)
 
-target_link_libraries(opengl_practice libglew_static glfw)
+target_link_libraries(opengl_practice libglew_static glfw glm)

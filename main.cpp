@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
-#include <string.h>
+#include <cstring>
 #include <string>
+#include <glm/vec3.hpp> // glm::vec3
 
 #include <filesystem>
 
