@@ -2,7 +2,7 @@
 #include <fstream>
 #include <cstring>
 #include <string>
-#include <glm/vec3.hpp> // glm::vec3
+#include <stdlib.h>
 
 #include <filesystem>
 
@@ -13,7 +13,12 @@
 const GLint WIDTH = 800;
 const GLint HEIGHT = 600;
 
-GLuint VAO, VBO, root_shader;
+GLuint VAO, VBO, root_shader, uniform_x_move;
+
+bool direction = true;
+float tri_offset = 0.0f;
+float tri_max_offset = 0.7f;
+float tri_increment = 0.0005f;
 
 
 std::string readFile(const char *filePath) {
@@ -80,6 +85,7 @@ void AddShader(GLuint program, const char *shaderCode, GLenum shaderType) {
 
     glAttachShader(program, shader);
 }
+
 void CompileShaders() {
     root_shader = glCreateProgram();
     if (!root_shader) {
@@ -111,6 +117,8 @@ void CompileShaders() {
         glGetProgramInfoLog(root_shader, sizeof(error_log), nullptr, error_log);
         printf("Error validating program: %s \n", error_log);
     }
+
+    uniform_x_move = glGetUniformLocation(root_shader, "x_move");
 }
 
 int main() {
@@ -151,11 +159,23 @@ int main() {
 
     while (!glfwWindowShouldClose(mainWindow)) {
         glfwPollEvents();
+        if (direction) {
+            tri_offset += tri_increment;
+        } else {
+            tri_offset -= tri_increment;
+        }
+
+        if (std::abs(tri_offset) >= tri_max_offset) {
+            direction = !direction;
+        }
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(root_shader);
+
+        glUniform1f(uniform_x_move, tri_offset);
+
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
