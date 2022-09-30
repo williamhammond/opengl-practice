@@ -16,7 +16,7 @@
 const GLint WIDTH = 800;
 const GLint HEIGHT = 600;
 
-GLuint VAO, VBO, IBO, root_shader, uniform_model;
+GLuint VAO, VBO, IBO, root_shader, uniform_model, uniform_projection;
 
 bool direction = true;
 float tri_offset = 0.0f;
@@ -137,6 +137,7 @@ void CompileShaders() {
     }
 
     uniform_model = glGetUniformLocation(root_shader, "model");
+    uniform_projection = glGetUniformLocation(root_shader, "projection");
 }
 
 int main() {
@@ -178,6 +179,8 @@ int main() {
     CreateTriangle();
     CompileShaders();
 
+    glm::mat4 projection = glm::perspective(45.0f, (GLfloat) WIDTH / (GLfloat) HEIGHT, 0.1f, 100.0f);
+
     while (!glfwWindowShouldClose(mainWindow)) {
         glfwPollEvents();
         if (direction) {
@@ -201,11 +204,12 @@ int main() {
         glUseProgram(root_shader);
 
         glm::mat4 model(1.0f);
-//        model = glm::translate(model, glm::vec3(tri_offset, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));
         model = glm::rotate(model, current_angle, glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::scale(model, glm::vec3(0.5, 0.5f, 0.5f));
 
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(projection));
 
 
         glBindVertexArray(VAO);
