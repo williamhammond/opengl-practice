@@ -35,6 +35,6 @@ if (NOT glew_POPULATED)
 endif ()
 
 
-add_executable(opengl_practice main.cpp mesh.cpp mesh.h shader.cpp shader.h)
+add_executable(opengl_practice main.cpp mesh.cpp mesh.h shader.cpp shader.h window.cpp window.h)
 
 target_link_libraries(opengl_practice libglew_static glfw glm)

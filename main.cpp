@@ -1,10 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <string>
 #include <vector>
-
-#include <filesystem>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -14,10 +8,7 @@
 
 #include "mesh.h"
 #include "shader.h"
-
-// Window dimensions
-const GLint WIDTH = 800;
-const GLint HEIGHT = 600;
+#include "window.h"
 
 std::vector<Mesh *> meshes;
 
@@ -58,47 +49,16 @@ Shader *CreateShader() {
 }
 
 int main() {
-    if (!glfwInit()) {
-        printf("GLFW initialization failed!");
-        glfwTerminate();
-        return 1;
-    }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    auto *mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Test Window", nullptr, nullptr);
-    if (!mainWindow) {
-        printf("GLFW window creation failed!");
-        glfwTerminate();
-        return 1;
-    }
-
-    int bufferWidth;
-    int bufferHeight;
-    glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
-    glfwMakeContextCurrent(mainWindow);
-
-    glewExperimental = GL_TRUE;
-    GLenum error = glewInit();
-    if (error != GLEW_OK) {
-        printf("Error: %s", glewGetErrorString(error));
-        glfwDestroyWindow(mainWindow);
-        glfwTerminate();
-        return 1;
-    }
-
-    glEnable(GL_DEPTH_TEST);
-
-    glViewport(0, 0, bufferWidth, bufferHeight);
+    auto *window = new Window(800, 600);
+    window->Initalize();
     CreateTriangle();
-
     Shader *shader = CreateShader();
-    glm::mat4 projection = glm::perspective(45.0f, (GLfloat) WIDTH / (GLfloat) HEIGHT, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(45.0f, (GLfloat) window->GetHeight() / (GLfloat) window->GetHeight(), 0.1f,
+                                            100.0f);
 
-    while (!glfwWindowShouldClose(mainWindow)) {
+    while (!window->ShouldClose()) {
         glfwPollEvents();
         if (direction) {
             tri_offset += tri_increment;
@@ -134,7 +94,7 @@ int main() {
 
 
         glUseProgram(0);
-        glfwSwapBuffers(mainWindow);
+        window->SwapBuffers();
     }
 
     return 0;
