@@ -23,6 +23,9 @@ float tri_offset = 0.0f;
 float tri_max_offset = 0.7f;
 float tri_increment = 0.0005f;
 
+float current_angle = 0.0f;
+float angle_delta = 0.001f;
+
 
 std::string readFile(const char *filePath) {
     std::ifstream fileStream(filePath, std::ios::in);
@@ -172,13 +175,20 @@ int main() {
             direction = !direction;
         }
 
+        current_angle += angle_delta;
+        if (current_angle >= 360.0f) {
+            current_angle -= 360;
+        }
+
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(root_shader);
 
         glm::mat4 model(1.0f);
+        model = glm::rotate(model, current_angle, glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::translate(model, glm::vec3(tri_offset, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.4, 0.4f, 0.0f));
 
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 
