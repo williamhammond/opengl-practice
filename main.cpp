@@ -8,12 +8,15 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // Window dimensions
 const GLint WIDTH = 800;
 const GLint HEIGHT = 600;
 
-GLuint VAO, VBO, root_shader, uniform_x_move;
+GLuint VAO, VBO, root_shader, uniform_model;
 
 bool direction = true;
 float tri_offset = 0.0f;
@@ -118,7 +121,7 @@ void CompileShaders() {
         printf("Error validating program: %s \n", error_log);
     }
 
-    uniform_x_move = glGetUniformLocation(root_shader, "x_move");
+    uniform_model = glGetUniformLocation(root_shader, "model");
 }
 
 int main() {
@@ -174,7 +177,11 @@ int main() {
 
         glUseProgram(root_shader);
 
-        glUniform1f(uniform_x_move, tri_offset);
+        glm::mat4 model(1.0f);
+        model = glm::translate(model, glm::vec3(tri_offset, 0.0f, 0.0f));
+
+        glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
+
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);

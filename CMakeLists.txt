@@ -18,7 +18,7 @@ FetchContent_MakeAvailable(glfw)
 
 FetchContent_Declare(glm
         GIT_REPOSITORY git@github.com:g-truc/glm.git
-        GIT_TAG 0.9.9.8
+        GIT_TAG origin/master
         )
 FetchContent_MakeAvailable(glm)
 
