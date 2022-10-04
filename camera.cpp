@@ -54,6 +54,23 @@ void Camera::KeyControl(bool *keys, GLfloat delta_time) {
     }
 }
 
+void Camera::MouseControl(GLfloat x_delta, GLfloat y_delta) {
+    x_delta *= rotation_speed;
+    y_delta *= rotation_speed;
+
+    yaw += x_delta;
+    pitch += y_delta;
+
+    if (pitch > 89.0f) {
+        pitch = 89.0f;
+    }
+
+    if (pitch < -89.0f) {
+        pitch = -89.0f;
+    }
+    update();
+}
+
 glm::mat4 Camera::CalculateViewMatrix() {
     return glm::lookAt(position, position + front, up);
 }

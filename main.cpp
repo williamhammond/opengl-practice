@@ -68,6 +68,7 @@ int main() {
 
         glfwPollEvents();
         camera.KeyControl(window->getKeys(), delta_time);
+        camera.MouseControl(window->getXDelta(), window->getYDelta());
 
         if (direction) {
             tri_offset += tri_increment;

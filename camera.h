@@ -20,6 +20,8 @@ public:
 
     void KeyControl(bool *keys, GLfloat delta_time);
 
+    void MouseControl(GLfloat x_delta, GLfloat y_delta);
+
     glm::mat4 CalculateViewMatrix();
 
 private:
