@@ -9,9 +9,9 @@
 #include "mesh.h"
 #include "shader.h"
 #include "window.h"
+#include "camera.h"
 
 std::vector<Mesh *> meshes;
-
 
 bool direction = true;
 float tri_offset = 0.0f;
@@ -51,13 +51,17 @@ Shader *CreateShader() {
 int main() {
     auto *window = new Window(800, 600);
     window->Initalize();
+
     CreateTriangle();
     Shader *shader = CreateShader();
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat) window->GetHeight() / (GLfloat) window->GetHeight(), 0.1f,
                                             100.0f);
+    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.01f, 1.0f);
 
     while (!window->ShouldClose()) {
         glfwPollEvents();
+        camera.KeyControl(window->getKeys());
+
         if (direction) {
             tri_offset += tri_increment;
         } else {
@@ -85,6 +89,7 @@ int main() {
 
         glUniformMatrix4fv(shader->GetModel(), 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(shader->GetProjection(), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(shader->GetView(), 1, GL_FALSE, glm::value_ptr(camera.CalculateViewMatrix()));
 
         for (auto mesh: meshes) {
             mesh->RenderMesh();

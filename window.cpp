@@ -9,6 +9,9 @@ Window::Window(GLint window_width, GLint window_height) {
     for (bool &key: keys) {
         key = false;
     }
+
+    x_delta = 0.0f;
+    y_delta = 0.0f;
 }
 
 Window::~Window() {
