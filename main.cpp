@@ -49,8 +49,6 @@ Shader *CreateShader() {
 }
 
 int main() {
-
-
     auto *window = new Window(800, 600);
     window->Initalize();
     CreateTriangle();

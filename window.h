@@ -21,10 +21,32 @@ public:
 
     void SwapBuffers() { glfwSwapBuffers(main_window); };
 
-private:
-    GLFWwindow* main_window;
-    GLint width, height;
+    bool *getKeys() { return keys; };
 
+    // TODO: Add bool to see if the mouse moved since the last check to mak this more robust
+    GLfloat getXDelta();
+    GLfloat getYDelta();
+
+
+private:
+    GLFWwindow *main_window;
+
+    GLint width, height;
+    GLint buffer_width, buffer_height;
+
+    bool keys[1024];
+
+    GLfloat last_x;
+    GLfloat last_y;
+    GLfloat x_delta;
+    GLfloat y_delta;
+    bool is_first_movement;
+
+    static void handleKeys(GLFWwindow *window, int key, int code, int action, int mode);
+
+    static void handleMoues(GLFWwindow *window, double x_position, double y_position);
+
+    void createCallbacks();
 };
 
 
