@@ -35,21 +35,22 @@ void Camera::update() {
     up = glm::normalize(glm::cross(right, front));
 }
 
-void Camera::KeyControl(bool *keys) {
+void Camera::KeyControl(bool *keys, GLfloat delta_time) {
+    GLfloat velocity = movement_speed * delta_time;
     if (keys[GLFW_KEY_W]) {
-        position += front * movement_speed;
+        position += front * velocity;
     }
 
     if (keys[GLFW_KEY_A]) {
-        position -= right * movement_speed;
+        position -= right * velocity;
     }
 
     if (keys[GLFW_KEY_S]) {
-        position -= front * movement_speed;
+        position -= front * velocity;
     }
 
     if (keys[GLFW_KEY_D]) {
-        position += right * movement_speed;
+        position += right * velocity;
     }
 }
 

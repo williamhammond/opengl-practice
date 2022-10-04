@@ -21,6 +21,9 @@ float tri_increment = 0.0005f;
 float current_angle = 0.0f;
 float angle_delta = 0.001f;
 
+GLfloat delta_time = 0.0f;
+GLfloat last_time = 0.0f;
+
 
 void CreateTriangle() {
     unsigned int indices[] = {
@@ -56,11 +59,15 @@ int main() {
     Shader *shader = CreateShader();
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat) window->GetHeight() / (GLfloat) window->GetHeight(), 0.1f,
                                             100.0f);
-    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.01f, 1.0f);
+    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 1.0f, 1.0f);
 
     while (!window->ShouldClose()) {
+        GLfloat now = glfwGetTime();
+        delta_time = now - last_time;
+        last_time = now;
+
         glfwPollEvents();
-        camera.KeyControl(window->getKeys());
+        camera.KeyControl(window->getKeys(), delta_time);
 
         if (direction) {
             tri_offset += tri_increment;
